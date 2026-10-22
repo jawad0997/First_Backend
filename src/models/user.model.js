@@ -1,10 +1,10 @@
-import mongoose, {Scheema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import bcrypt from "bcrypt"
 import jsonwebtoken from "jsonwebtoken"
 
-const userScheema = new Scheema({
+const userScheema = new Schema({
   username:{
-    type: Stirng,
+    type: String,
     required:true,
     unique:true,
     index:true,
@@ -12,14 +12,14 @@ const userScheema = new Scheema({
     trim:true
   },
   email:{
-    type: Stirng,
+    type: String,
     required:true,
     unique:true,
     lowercase:true,
     trim:true
   },
   fullname:{
-    type: Stirng,
+    type: String,
     required:true,
     index:true,
     trim:true
@@ -28,12 +28,12 @@ const userScheema = new Scheema({
     type:String ,//we get this from cloudnary
     required: true
   },
-  avatar:{
+  coverimg:{
     type:String ,//we get this from cloudnary
   },
   watchHistory:[
     {
-      type: mongoose.Scheema.Type.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref:"Video"
     }
   ],
@@ -51,7 +51,7 @@ const userScheema = new Scheema({
 
 userScheema.pre("save", async function (next) {
 	if(!this.isModified("password")) return next()
-  this.password = bcrypt.hash(this.password,10)
+  this.password = await bcrypt.hash(this.password,10)
   next()
 })
 
@@ -62,14 +62,14 @@ userScheema.method.isPasswordCorrect = async function (password) {
 userScheema.method.generateAccessToken = function () {
 	return jwt.sign(
     {
-      _id = this.id,
-    name = this.username,
-    email=this.email,
-    fullname = this.fullname
+      _id: this.id,
+    name: this.username,
+    email: this.email,
+    fullname:  this.fullname
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn = process.env.ACCESS_TOKEN_EXPIRY
+      expiresIn:  process.env.ACCESS_TOKEN_EXPIRY
     }
   )
 }
@@ -77,12 +77,12 @@ userScheema.method.generateAccessToken = function () {
 userScheema.method.generateRefreshToken = function () {
 	return jwt.sign(
     {
-      _id = this.id,
+      _id:  this.id,
     
     },
     process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn = process.env.REFRESH_TOKEN_EXPIRY
+      expiresIn:  process.env.REFRESH_TOKEN_EXPIRY
     }
   )
 }
