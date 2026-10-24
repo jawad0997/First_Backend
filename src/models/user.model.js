@@ -49,14 +49,14 @@ const userScheema = new Schema({
 })
 
 
-userScheema.pre("save", async function (next) {
+userScheema.pre("save", async function () {
 	if(!this.isModified("password")) return next()
   this.password = await bcrypt.hash(this.password,10)
-  next()
 })
 
+
 userScheema.method.isPasswordCorrect = async function (password) {
- return	await bycript.compare(password,this.password)
+ return	await bcrypt.compare(password,this.password)
 }
 
 userScheema.method.generateAccessToken = function () {
