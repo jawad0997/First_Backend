@@ -1,6 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 import bcrypt from "bcrypt"
-import jsonwebtoken from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 const userScheema = new Schema({
   username:{
@@ -26,7 +26,7 @@ const userScheema = new Schema({
   },
   avatar:{
     type:String ,//we get this from cloudnary
-    required: true
+    required:true
   },
   coverimg:{
     type:String ,//we get this from cloudnary
@@ -39,7 +39,7 @@ const userScheema = new Schema({
   ],
   password:{
     type: String,
-    required:[true,"password is required"]
+   required:[true,"password is required"]
   },
   refreshTokens:{
     type: String
@@ -50,16 +50,16 @@ const userScheema = new Schema({
 
 
 userScheema.pre("save", async function () {
-	if(!this.isModified("password")) return next()
+	if(!this.isModified("password")) return 
   this.password = await bcrypt.hash(this.password,10)
 })
 
 
-userScheema.method.isPasswordCorrect = async function (password) {
+userScheema.methods.isPasswordCorrect = async function (password) {
  return	await bcrypt.compare(password,this.password)
 }
 
-userScheema.method.generateAccessToken = function () {
+userScheema.methods.generateAccessToken = function () {
 	return jwt.sign(
     {
       _id: this.id,
@@ -74,7 +74,7 @@ userScheema.method.generateAccessToken = function () {
   )
 }
 
-userScheema.method.generateRefreshToken = function () {
+userScheema.methods.generateRefreshToken = function () {
 	return jwt.sign(
     {
       _id:  this.id,
