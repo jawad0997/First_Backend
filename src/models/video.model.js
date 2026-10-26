@@ -1,8 +1,8 @@
-import mongoose, {Scheema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 import aggregatePaginate from 'mongoose-aggregate-paginate-v2';
 
 
-const videoScheema = new Shceeema({
+const videoScheema = new Schema({
   videofile:{
     type:String,//from cloudnary 
     required:true
@@ -41,4 +41,4 @@ const videoScheema = new Shceeema({
 },{timestamps:true})
 
 videoScheema.plugin("mongooseAggregatePaginate")
-export const Video = mongoose.module("User",videoScheema)
+export const Video = mongoose.module("Video",videoScheema)
