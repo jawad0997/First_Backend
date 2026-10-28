@@ -21,40 +21,19 @@ const uploadOnCloudinary  = async (localFilePath) => {
   fs.unlinkSync(localFilePath)
   return null
 }
-
-export {uploadOnCloudinary}
-
-
-/*import { v2 as cloudinary } from "cloudinary";
-import fs from "node:fs/promises";
-
-cloudinary.config({
-  secure: true
-});
-
-const uploadOnCloudinary = async (localFilePath) => {
-  if (!localFilePath) return null;
-
+//del old 
+const deletecloudinary = async (publicid) => {
   try {
-    const response = await cloudinary.uploader.upload(
-      localFilePath,
-      { resource_type: "auto" }
-    );
-
-    console.log("Cloudinary upload successful:", response.secure_url);
-
-    return response;
+    if (!publicid) return null
+    const del = await cloudinary.uploader.destroy(publicid)
+    return del
   } catch (error) {
-    console.error("Cloudinary upload failed:", error.message);
-    return null;
-  } finally {
-    try {
-      await fs.unlink(localFilePath);
-    } catch (error) {
-      console.error("Temporary file cleanup failed:", error.message);
-    }
+    console.log("Cloudinary deleate error",error);
+    return null
   }
-};
+  
+}
 
-export { uploadOnCloudinary }
-*/
+export {uploadOnCloudinary,deletecloudinary}
+
+

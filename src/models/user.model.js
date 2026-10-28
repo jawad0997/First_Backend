@@ -28,9 +28,17 @@ const userScheema = new Schema({
     type:String ,//we get this from cloudnary
     required:true
   },
+  avatarPublicId: {
+  type: String,
+  default: ""
+},
   coverimg:{
     type:String ,//we get this from cloudnary
   },
+  coverimgPublicId: {
+  type: String,
+  default: ""
+},
   watchHistory:[
     {
       type: mongoose.Schema.Types.ObjectId,
